@@ -4,17 +4,18 @@ import {
   Text,
   Image,
   StyleSheet,
-  ScrollView,
   Button,
   SafeAreaView,
+  StatusBar,
   Dimensions,
 } from "react-native";
 
 import { getProduct } from "../services/products";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../redux/cartSlice";
+import Toast from "react-native-toast-message";
 
-const ProductDetails = ({ route }) => {
+const ProductDetails = ({ route, navigation }) => {
   const { productId } = route.params;
 
   const dispatch = useDispatch();
@@ -27,8 +28,9 @@ const ProductDetails = ({ route }) => {
   const handleAddToCart = (item) => {
     dispatch(addItemToCart(item));
   };
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ marginTop: StatusBar.currentHeight }}>
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={{ uri: product.image }} />
       </View>

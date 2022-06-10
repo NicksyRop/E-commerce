@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, StatusBar } from "react-native";
 import Product from "../components/Product";
+import TopBar from "../components/TopBar";
 
 import { getProducts } from "../services/products";
 const ProductsList = ({ navigation }) => {
@@ -19,7 +20,8 @@ const ProductsList = ({ navigation }) => {
     setProducts(getProducts());
   });
   return (
-    <View>
+    <View style={styles.container}>
+      <TopBar />
       <FlatList
         style={styles.container}
         data={products}
@@ -31,6 +33,8 @@ const ProductsList = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    marginTop: StatusBar.currentHeight,
+  },
 });
 export default ProductsList;
