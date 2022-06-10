@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, Text, Image, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
+import Product from "../components/Product";
 
 import { getProducts } from "../services/products";
-const ProductsList = () => {
+const ProductsList = ({ navigation }) => {
   const [products, setProducts] = useState([]);
 
-  const renderProduct = ({ item }) => <View></View>;
+  const renderProduct = ({ item }) => (
+    <Product
+      {...item}
+      onPress={() =>
+        navigation.navigate("ProductDetails", { productId: item.id })
+      }
+    />
+  );
 
   useEffect(() => {
     setProducts(getProducts());
@@ -13,6 +21,7 @@ const ProductsList = () => {
   return (
     <View>
       <FlatList
+        style={styles.container}
         data={products}
         keyExtractor={(item) => item.id}
         renderItem={renderProduct}
@@ -21,5 +30,7 @@ const ProductsList = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {},
+});
 export default ProductsList;

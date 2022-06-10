@@ -1,13 +1,22 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 
 const Product = ({ name, price, onPress, image }) => {
   return (
-    <TouchableOpacity style={StyleSheet.card} onPress={onPress}>
-      <Image style={styles.image} source={image} />
-      <View>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.price}>${price}</Text>
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.card}>
+        <Image style={styles.image} source={{ uri: image }} />
+        <View>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.price}>${price}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -17,14 +26,15 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
     borderRadius: 16,
-    marginTop: "4%",
+    marginTop: "3%",
     alignItems: "center",
     justifyContent: "center",
   },
 
   image: {
-    width: "100%",
+    width: "90%",
     aspectRatio: 1,
+    resizeMode: "contain",
   },
   name: {
     fontSize: 22,
@@ -32,7 +42,6 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    fontWeight: 600,
     marginBottom: 8,
   },
 });
