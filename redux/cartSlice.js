@@ -75,7 +75,22 @@ export const cartSlice = createSlice({
       storeItems(state.cartItems);
     },
 
-    getTotals: (state, action) => {},
+    getTotals: (state, action) => {
+      const totals = state.cartItems.reduce(
+        (cartTotal, item) => {
+          let { quantity, price } = item;
+
+          cartTotal.totals += quantity * price;
+          cartSlice.quantity += quantity;
+
+          return cartTotal;
+        },
+        {
+          totals: 0,
+          quantity: 0,
+        }
+      );
+    },
 
     increamentCart: (state, action) => {
       //get item index
@@ -94,12 +109,21 @@ export const cartSlice = createSlice({
 
       if (state.cartItems[cartIndex].cartQuantity > 1) {
         state.cartItems[cartIndex].cartQuantity -= 1;
+        Toast.show({
+          type: "error",
+          text2: ` ${action.payload.name}  cart quantity  updated`,
+        });
       } else if (state.cartItems[cartIndex].cartQuantity === 1) {
         const newItems = state.cartItems.filter(
           (item) => item.id !== action.payload.id
         );
 
         state.cartItems = newItems;
+
+        Toast.show({
+          type: "error",
+          text2: ` ${action.payload.name} removed from cart`,
+        });
       }
     },
   },
