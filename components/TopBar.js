@@ -9,7 +9,7 @@ const TopBar = () => {
       <Input
         placeholder="Search"
         variant="filled"
-        width="80%"
+        width="100%"
         borderRadius="10"
         py="2"
         px="2"
@@ -24,8 +24,6 @@ const TopBar = () => {
           />
         }
       />
-
-      <Ionicons name="cart-outline" size={30} />
     </View>
   );
 };
