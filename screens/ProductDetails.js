@@ -13,7 +13,6 @@ import {
 import { getProduct } from "../services/products";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../redux/cartSlice";
-import Toast from "react-native-toast-message";
 
 const ProductDetails = ({ route, navigation }) => {
   const { productId } = route.params;
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
   },
 
   infoContainer: {
-    padding: 20,
+    padding: 10,
   },
   name: {
     fontSize: 16,
