@@ -57,10 +57,14 @@ export const cartSlice = createSlice({
     removeItemFromCart: (state, action) => {
       //filter products that dont match the id
       const remainingItems = state.cartItems.filter(
-        (item) => item.is !== action.payload.id
+        (item) => item.id !== action.payload.id
       );
 
       state.cartItems = remainingItems;
+      Toast.show({
+        type: "error",
+        text2: ` ${action.payload.name} removed from cart`,
+      });
 
       storeItems(state.cartItems);
     },
@@ -72,9 +76,40 @@ export const cartSlice = createSlice({
     },
 
     getTotals: (state, action) => {},
+
+    increamentCart: (state, action) => {
+      //get item index
+
+      const itemIndex = state.cartItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+
+      state.cartItems[itemIndex].cartQuantity += 1;
+    },
+
+    decremanetCart: (state, action) => {
+      const cartIndex = state.cartItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+
+      if (state.cartItems[cartIndex].cartQuantity > 1) {
+        state.cartItems[cartIndex].cartQuantity -= 1;
+      } else if (state.cartItems[cartIndex].cartQuantity === 1) {
+        const newItems = state.cartItems.filter(
+          (item) => item.id !== action.payload.id
+        );
+
+        state.cartItems = newItems;
+      }
+    },
   },
 });
 
-export const { addItemToCart, removeItemFromCart } = cartSlice.actions;
+export const {
+  addItemToCart,
+  removeItemFromCart,
+  increamentCart,
+  decremanetCart,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

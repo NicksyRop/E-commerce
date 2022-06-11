@@ -7,17 +7,35 @@ import {
   StatusBar,
   FlatList,
   Button,
+  TouchableOpacity,
   Image,
   Dimensions,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  decremanetCart,
+  increamentCart,
+  removeItemFromCart,
+} from "../redux/cartSlice";
 
 const CartDetails = () => {
   const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const handleDelete = (item) => {
+    dispatch(removeItemFromCart(item));
+  };
+
+  const handleIncreament = (item) => {
+    dispatch(increamentCart(item));
+  };
+
+  const handleDecreament = (item) => {
+    dispatch(decremanetCart(item));
+  };
   const renderItem = ({ item }) => (
     <View style={styles.container}>
       <View style={styles.upper}>
@@ -32,15 +50,18 @@ const CartDetails = () => {
         </View>
       </View>
       <View style={styles.lower}>
-        <View style={styles.lower1}>
-          <Icon name="trash" sizde={16} />
-          <Text>REMOVE</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.lower1}
+          onPress={() => handleDelete(item)}
+        >
+          <Icon name="trash" size={23} />
+          <Text style={{ marginLeft: 5 }}>REMOVE</Text>
+        </TouchableOpacity>
 
         <View style={styles.lower2}>
-          <Button title="+" />
+          <Button title="+" onPress={() => handleIncreament(item)} />
           <Text> {item.cartQuantity}</Text>
-          <Button title="-" />
+          <Button title="-" onPress={() => handleDecreament(item)} />
         </View>
       </View>
     </View>
@@ -58,7 +79,7 @@ const CartDetails = () => {
           />
         </View>
       ) : (
-        <View>
+        <View style={styles.card}>
           <Text>No items in cart</Text>
         </View>
       )}
@@ -100,6 +121,15 @@ const styles = StyleSheet.create({
     height: Dimensions.get("window").width / 2 - 60,
   },
   button: {},
+
+  card: {
+    height: "50%",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "grey",
+    borderRadius: 10,
+  },
 });
 
 export default CartDetails;
