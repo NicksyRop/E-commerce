@@ -1,16 +1,26 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Tab = createBottomTabNavigator();
 import Icon from "react-native-vector-icons/Feather";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ProductsList from "../screens/ProductsList";
 import CartDetails from "../screens/CartDetails";
 import Profile from "../screens/Profile";
-
-const Stack = createNativeStackNavigator();
+import { useSelector, useDispatch } from "react-redux";
+import { getTotals } from "../redux/cartSlice";
+import Login from "../screens/Login";
 
 const Main = () => {
+  const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const [totals, setTotals] = useState();
+
+  useEffect(() => {
+    dispatch(getTotals());
+
+    setTotals(cart.cartTotalQuantity);
+  }, [cart]);
+
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -30,13 +40,13 @@ const Main = () => {
           tabBarIcon: ({ size, color }) => (
             <Icon name="shopping-cart" color={color} size={size} />
           ),
-          tabBarBadge: 3,
+          tabBarBadge: totals,
         }}
       />
 
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={Login}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Icon name="user" color={color} size={size} />

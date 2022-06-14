@@ -1,26 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
 
 const storeItems = async (value) => {
   const jsonValue = JSON.stringify(value);
   await AsyncStorage.setItem("cartItems", jsonValue);
 };
 
-const getItems = async () => {
-  const data = await AsyncStorage.getItem("cartItems");
-
-  if (data !== null) {
-    return await JSON.parse(data);
-  } else {
-    return state;
-  }
-};
-
 const initialState = {
   cartItems: [],
   cartTotalAmount: 0,
-  cartTotalQuanity: 0,
+  cartTotalQuantity: 0,
 };
 
 export const cartSlice = createSlice({
@@ -73,23 +64,32 @@ export const cartSlice = createSlice({
       state.cartItems = [];
 
       storeItems(state.cartItems);
+      Toast.show({
+        type: "success",
+        text2: ` Cart has been cleared`,
+      });
     },
 
     getTotals: (state, action) => {
-      const totals = state.cartItems.reduce(
-        (cartTotal, item) => {
-          let { quantity, price } = item;
+      let { total, quantity } = state.cartItems.reduce(
+        (cartTotal, cartItem) => {
+          const { price, cartQuantity } = cartItem;
 
-          cartTotal.totals += quantity * price;
-          cartSlice.quantity += quantity;
+          const itemTotal = price * cartQuantity;
+
+          cartTotal.total += itemTotal;
+          cartTotal.quantity += cartQuantity;
 
           return cartTotal;
         },
         {
-          totals: 0,
+          total: 0,
           quantity: 0,
         }
       );
+
+      state.cartTotalQuantity = quantity;
+      state.cartTotalAmount = total;
     },
 
     increamentCart: (state, action) => {
@@ -100,6 +100,12 @@ export const cartSlice = createSlice({
       );
 
       state.cartItems[itemIndex].cartQuantity += 1;
+      storeItems(state.cartItems);
+
+      Toast.show({
+        type: "success",
+        text2: ` ${action.payload.name}  cart quantity  updated`,
+      });
     },
 
     decremanetCart: (state, action) => {
@@ -109,6 +115,7 @@ export const cartSlice = createSlice({
 
       if (state.cartItems[cartIndex].cartQuantity > 1) {
         state.cartItems[cartIndex].cartQuantity -= 1;
+        storeItems(state.cartItems);
         Toast.show({
           type: "error",
           text2: ` ${action.payload.name}  cart quantity  updated`,
@@ -119,6 +126,7 @@ export const cartSlice = createSlice({
         );
 
         state.cartItems = newItems;
+        storeItems(state.cartItems);
 
         Toast.show({
           type: "error",
@@ -134,6 +142,8 @@ export const {
   removeItemFromCart,
   increamentCart,
   decremanetCart,
+  getTotals,
+  clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

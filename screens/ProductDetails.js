@@ -4,11 +4,12 @@ import {
   Text,
   Image,
   StyleSheet,
-  Button,
   SafeAreaView,
   StatusBar,
   Dimensions,
 } from "react-native";
+
+import { Button } from "native-base";
 
 import { getProduct } from "../services/products";
 import { useDispatch } from "react-redux";
@@ -39,7 +40,11 @@ const ProductDetails = ({ route, navigation }) => {
         <Text style={styles.price}> {product.price}</Text>
         <Text style={styles.description}> {product.details}</Text>
       </View>
-      <Button title="Add To Cart" onPress={() => handleAddToCart(product)} />
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <Button w="75%" onPress={() => handleAddToCart(product)}>
+          <Text style={{ color: "white" }}>Add To Cart</Text>
+        </Button>
+      </View>
     </SafeAreaView>
   );
 };

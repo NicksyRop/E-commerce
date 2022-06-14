@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   View,
@@ -6,24 +6,54 @@ import {
   StyleSheet,
   StatusBar,
   FlatList,
-  Button,
   TouchableOpacity,
   Image,
   Dimensions,
 } from "react-native";
+
+import { Button, ScrollView } from "native-base";
 import Icon from "react-native-vector-icons/Ionicons";
 
 import { useSelector, useDispatch } from "react-redux";
 
+import { Divider } from "native-base";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
+  clearCart,
   decremanetCart,
+  getTotals,
   increamentCart,
   removeItemFromCart,
 } from "../redux/cartSlice";
 
-const CartDetails = () => {
-  const cart = useSelector((state) => state.cart);
+const CartDetails = ({ navigation }) => {
+  const cartTotals = useSelector((state) => state.cart);
+  const [cart, setcart] = useState([]);
+
+  const [totalsAmount, setTotalsAmount] = useState();
+
+  async function getItems() {
+    let data = await AsyncStorage.getItem("cartItems");
+
+    if (data !== null) {
+      data = JSON.parse(data);
+      setcart(data);
+    } else {
+      setcart(null);
+    }
+  }
+
+  useEffect(() => {
+    getItems();
+
+    dispatch(getTotals());
+
+    setTotalsAmount(cartTotals.cartTotalAmount);
+  }, [cart]);
+
+  //console.log(cart);
+
   const dispatch = useDispatch();
   const handleDelete = (item) => {
     dispatch(removeItemFromCart(item));
@@ -35,6 +65,10 @@ const CartDetails = () => {
 
   const handleDecreament = (item) => {
     dispatch(decremanetCart(item));
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
   };
   const renderItem = ({ item }) => (
     <View style={styles.container}>
@@ -59,28 +93,73 @@ const CartDetails = () => {
         </TouchableOpacity>
 
         <View style={styles.lower2}>
-          <Button title="+" onPress={() => handleIncreament(item)} />
+          <Button onPress={() => handleDecreament(item)}>
+            <Text style={{ color: "white" }}>-</Text>
+          </Button>
+
           <Text> {item.cartQuantity}</Text>
-          <Button title="-" onPress={() => handleDecreament(item)} />
+          <Button onPress={() => handleIncreament(item)}>
+            <Text style={{ color: "white" }}>+</Text>
+          </Button>
         </View>
       </View>
     </View>
   );
 
+  const Devider = () => <Divider my="2" />;
+
   return (
     <View style={{ marginTop: StatusBar.currentHeight }}>
-      {cart.cartItems.length > 0 ? (
-        <View>
+      {cart.length > 0 ? (
+        <ScrollView>
           <Text>CART SUMMARY</Text>
           <FlatList
-            data={cart.cartItems}
+            data={cart}
             keyExtractor={(item) => item.id}
             renderItem={renderItem}
+            ListFooterComponent={<View style={{ height: 20 }} />}
+            // style={{ marginBottom: 70 }}
+            ItemSeparatorComponent={Devider}
           />
-        </View>
+          <View style={styles.totals}>
+            <Button
+              onPress={() => handleClearCart()}
+              style={{ borderRadius: 10 }}
+            >
+              <Text style={{ color: "white" }}>Clear cart</Text>
+            </Button>
+
+            <View style={{ marginBottom: 20 }}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <Text style={{ fontSize: 20, fontWeight: "400" }}>
+                  Subtotals :
+                </Text>
+                <Text
+                  style={{ marginLeft: 10, fontSize: 20, fontWeight: "400" }}
+                >
+                  {totalsAmount}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.checkoutButton}
+                onPress={() => navigation.navigate("Checkout")}
+              >
+                <Text>Checkout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </ScrollView>
       ) : (
         <View style={styles.card}>
-          <Text>No items in cart</Text>
+          <Text style={{ color: "blue", fontSize: 25 }}>No items in cart</Text>
         </View>
       )}
     </View>
@@ -93,6 +172,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "center",
     padding: 10,
+    flex: 1,
   },
   upper: {
     display: "flex",
@@ -115,6 +195,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   image: {
     width: Dimensions.get("window").width / 2 - 60,
@@ -127,8 +208,22 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "grey",
+
     borderRadius: 10,
+  },
+  totals: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+
+  checkoutButton: {
+    marginTop: 10,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: "blue",
+    alignItems: "center",
+    padding: 10,
   },
 });
 
