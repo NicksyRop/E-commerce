@@ -16,6 +16,9 @@ const ProductsList = ({ navigation }) => {
     />
   );
 
+  const renderFooter = () => {
+    return <View style={{ marginTop: 60 }}></View>;
+  };
   useEffect(() => {
     setProducts(getProducts());
   });
@@ -24,9 +27,11 @@ const ProductsList = ({ navigation }) => {
       <TopBar />
       <FlatList
         style={styles.container}
+        numColumns={2}
         data={products}
         keyExtractor={(item) => item.id}
         renderItem={renderProduct}
+        ListFooterComponent={renderFooter}
       />
     </View>
   );

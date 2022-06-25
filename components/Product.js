@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   View,
   Text,
@@ -25,10 +26,12 @@ const Product = ({ name, price, onPress, image }) => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: "white",
-    borderRadius: 16,
+    borderRadius: 10,
     marginTop: "3%",
     alignItems: "center",
     justifyContent: "center",
+    marginLeft: 6,
+    width: Dimensions.get("window").width / 2 - 10,
   },
 
   image: {
@@ -37,11 +40,11 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   name: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "bold",
   },
   price: {
-    fontSize: 16,
+    fontSize: 14,
     marginBottom: 8,
   },
 });
