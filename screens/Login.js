@@ -12,6 +12,15 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem("token", jsonValue);
+    } catch (e) {
+      // saving error
+    }
+  };
+
   const login = () => {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -32,25 +41,12 @@ const Login = ({ navigation }) => {
       "https://jwt-node-api-nicksy.herokuapp.com/api/users/login",
       requestOptions
     )
-      .then((response) => response.json())
+      .then((response) => response.text())
       .then((result) => {
-        if (result.error) {
-          console.log(result.error);
-        } else {
-          storeData(result);
-          navigation.navigate("Checkout");
-        }
+        storeData(result);
+        navigation.goBack();
       })
-      .catch((error) => console.log("error", error));
-  };
-
-  const storeData = async (value) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem("token", jsonValue);
-    } catch (e) {
-      // saving error
-    }
+      .catch((error) => console.log(error));
   };
 
   return (

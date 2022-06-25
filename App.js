@@ -16,6 +16,7 @@ import Authentication from "./stacks/Authentication";
 import Checkout from "./screens/Checkout";
 import Register from "./screens/Register";
 import * as Animatable from "react-native-animatable";
+import Profile from "./screens/Profile";
 
 const store = configureStore({
   reducer: {
@@ -63,7 +64,6 @@ export default function App() {
             <Stack.Screen name="ProductDetails" component={ProductDetails} />
             <Stack.Screen name="Checkout" component={Checkout} />
             <Stack.Screen name="Authenitcation" component={Authentication} />
-            <Stack.Screen name="Register" component={Register} />
           </Stack.Navigator>
         </NativeBaseProvider>
         <Toast />

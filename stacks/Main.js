@@ -8,7 +8,6 @@ import CartDetails from "../screens/CartDetails";
 import Profile from "../screens/Profile";
 import { useSelector, useDispatch } from "react-redux";
 import { getTotals } from "../redux/cartSlice";
-import Login from "../screens/Login";
 
 const Main = () => {
   const cart = useSelector((state) => state.cart);
@@ -46,7 +45,7 @@ const Main = () => {
 
       <Tab.Screen
         name="Profile"
-        component={Login}
+        component={Profile}
         options={{
           tabBarIcon: ({ size, color }) => (
             <Icon name="user" color={color} size={size} />

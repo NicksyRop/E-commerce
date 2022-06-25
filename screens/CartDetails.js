@@ -26,6 +26,7 @@ import {
   increamentCart,
   removeItemFromCart,
 } from "../redux/cartSlice";
+import Footer from "../components/Footer";
 
 const CartDetails = ({ navigation }) => {
   const cartTotals = useSelector((state) => state.cart);
@@ -40,7 +41,7 @@ const CartDetails = ({ navigation }) => {
       data = JSON.parse(data);
       setcart(data);
     } else {
-      setcart(null);
+      setcart([]);
     }
   }
 
@@ -70,6 +71,7 @@ const CartDetails = ({ navigation }) => {
   const handleClearCart = () => {
     dispatch(clearCart());
   };
+
   const renderItem = ({ item }) => (
     <View style={styles.container}>
       <View style={styles.upper}>
@@ -108,55 +110,35 @@ const CartDetails = ({ navigation }) => {
 
   const Devider = () => <Divider my="2" />;
 
+  const header = () => {
+    return (
+      <View>
+        <Text
+          style={{ textAlign: "center", fontWeight: "bold", marginTop: 10 }}
+        >
+          CART SUMMARY
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <View style={{ marginTop: StatusBar.currentHeight }}>
       {cart.length > 0 ? (
-        <ScrollView>
-          <Text>CART SUMMARY</Text>
-          <FlatList
-            data={cart}
-            keyExtractor={(item) => item.id}
-            renderItem={renderItem}
-            ListFooterComponent={<View style={{ height: 20 }} />}
-            // style={{ marginBottom: 70 }}
-            ItemSeparatorComponent={Devider}
-          />
-          <View style={styles.totals}>
-            <Button
-              onPress={() => handleClearCart()}
-              style={{ borderRadius: 10 }}
-            >
-              <Text style={{ color: "white" }}>Clear cart</Text>
-            </Button>
-
-            <View style={{ marginBottom: 20 }}>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
-                }}
-              >
-                <Text style={{ fontSize: 20, fontWeight: "400" }}>
-                  Subtotals :
-                </Text>
-                <Text
-                  style={{ marginLeft: 10, fontSize: 20, fontWeight: "400" }}
-                >
-                  {totalsAmount}
-                </Text>
-              </View>
-
-              <TouchableOpacity
-                style={styles.checkoutButton}
-                onPress={() => navigation.navigate("Checkout")}
-              >
-                <Text>Checkout</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ScrollView>
+        <FlatList
+          data={cart}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          ListFooterComponent={
+            <Footer
+              total={totalsAmount}
+              clearcart={handleClearCart}
+              navigation={navigation}
+            />
+          }
+          ListHeaderComponent={header}
+          ItemSeparatorComponent={Devider}
+        />
       ) : (
         <View style={styles.card}>
           <Text style={{ color: "blue", fontSize: 25 }}>No items in cart</Text>
@@ -210,20 +192,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
 
     borderRadius: 10,
-  },
-  totals: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
-
-  checkoutButton: {
-    marginTop: 10,
-    borderRadius: 10,
-    borderWidth: 1.5,
-    borderColor: "blue",
-    alignItems: "center",
-    padding: 10,
   },
 });
 

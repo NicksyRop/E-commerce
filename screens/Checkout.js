@@ -25,7 +25,6 @@ const Checkout = () => {
     getData();
   }, []);
 
-  console.log(userToken);
   return (
     <NativeBaseProvider>
       {userToken ? (

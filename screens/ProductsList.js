@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet, StatusBar } from "react-native";
 import Product from "../components/Product";
+import Banner from "../components/Banner";
 import TopBar from "../components/TopBar";
 
 import { getProducts } from "../services/products";
@@ -25,6 +26,7 @@ const ProductsList = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TopBar />
+      <Banner />
       <FlatList
         style={styles.container}
         numColumns={2}
