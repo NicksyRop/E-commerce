@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, Scrollview, Dimensions, Image, StyleSheet } from "react-native";
 import Swiper from "react-native-swiper";
 
-var width = Dimensions.get("window").width;
 var styles = {
   wrapper: {
     height: Dimensions.get("window").width / 2,
@@ -31,8 +30,8 @@ var styles = {
     fontWeight: "bold",
   },
   image: {
-    height: width / 2,
-    width: width - 40,
+    height: Dimensions.get("window").width,
+    width: Dimensions.get("window").width - 40,
   },
 };
 

@@ -25,8 +25,11 @@ const ProductsList = ({ navigation }) => {
   });
   return (
     <View style={styles.container}>
-      <TopBar />
-      <Banner />
+      <View style={{ display: "flex" }}>
+        <TopBar />
+        <Banner />
+      </View>
+
       <FlatList
         style={styles.container}
         numColumns={2}

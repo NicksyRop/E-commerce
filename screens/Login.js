@@ -44,7 +44,7 @@ const Login = ({ navigation }) => {
       .then((response) => response.text())
       .then((result) => {
         storeData(result);
-        navigation.goBack();
+        navigation.navigate("checkout");
       })
       .catch((error) => console.log(error));
   };

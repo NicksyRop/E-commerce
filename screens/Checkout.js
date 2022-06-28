@@ -28,8 +28,10 @@ const Checkout = () => {
   return (
     <NativeBaseProvider>
       {userToken ? (
-        <View>
-          <Text>Welcome back</Text>
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>Checkout Page</Text>
         </View>
       ) : (
         <Authentication />

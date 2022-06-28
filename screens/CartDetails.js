@@ -33,6 +33,7 @@ const CartDetails = ({ navigation }) => {
   const [cart, setcart] = useState([]);
 
   const [totalsAmount, setTotalsAmount] = useState();
+  const [tots, setTots] = useState([]);
 
   async function getItems() {
     let data = await AsyncStorage.getItem("cartItems");
@@ -45,15 +46,28 @@ const CartDetails = ({ navigation }) => {
     }
   }
 
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("totals");
+      const jsonVal = JSON.parse(value);
+      if (jsonVal !== null) {
+        setUserToken(jsonVal);
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
   useEffect(() => {
     getItems();
 
     dispatch(getTotals());
 
     setTotalsAmount(cartTotals.cartTotalAmount);
+    setTots(getData);
   }, [cart]);
 
-  //console.log(cart);
+  //console.log(tots);
 
   const dispatch = useDispatch();
   const handleDelete = (item) => {

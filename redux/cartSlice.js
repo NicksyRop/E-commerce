@@ -8,6 +8,11 @@ const storeItems = async (value) => {
   await AsyncStorage.setItem("cartItems", jsonValue);
 };
 
+const storeTotals = async (value) => {
+  const jsonValue = JSON.stringify(value);
+  await AsyncStorage.setItem("totals", jsonValue);
+};
+
 const initialState = {
   cartItems: [],
   cartTotalAmount: 0,
