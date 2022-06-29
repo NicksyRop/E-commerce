@@ -3,8 +3,7 @@
 Ecommerce
 
 ## Live Link
-Download the Apk  [here](https://expo.dev/artifacts/f43ccaaf-a9d8-41e4-a657-a8b074e65e8c)
-Download Expo on google store and scan this link .[here](https://expo.dev/@nicksy/NewsApp)
+To be provided
 
 ## About the Project
 Ecommerce is a cross platform mobile application.Customers can buy products online by adding items to cart.Redux and async storage is used for state management.Once a customer is done adding items to cart He/she can view cart items using the bottom middle tab
